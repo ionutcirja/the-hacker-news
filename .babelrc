@@ -19,6 +19,20 @@
       {
         "fileName": false
       }
-    ]
+    ],
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "@config": "./src/config",
+        "@app": "./src/app",
+        "@features": "./src/features",
+        "@routes": "./src/routes",
+        "@store": "./src/store",
+        "@reducers": "./src/reducers",
+        "@sagas": "./src/sagas",
+        "@style": "./src/style"
+      },
+      "cwd": "packagejson"
+    }]
   ]
 }

@@ -8,7 +8,18 @@
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "baseUrl": "."
+    "baseUrl": "./src/",
+    "paths": {
+      "@config/*": ["./config/*"],
+      "@app/*": ["./app/*"],
+      "@routes": ["./routes"],
+      "@features/*": ["./features/*"],
+      "@store": ["./store"],
+      "@reducers": ["./reducers"],
+      "@sagas": ["./sagas"],
+      "@style": ["./style"],
+      "@style/*": ["./style/*"]
+    }
   },
   "include": [
     "src"
