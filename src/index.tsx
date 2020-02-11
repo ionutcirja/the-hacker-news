@@ -1,9 +1,26 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { render } from 'react-dom';
-import routes from './routes';
-import App from './app';
+import { BrowserRouter } from 'react-router-dom';
+import initAxios from '@config/axios';
+import routes from '@routes';
+import createStore from '@store';
+import rootSaga from '@sagas';
+import App from '@app';
+
+initAxios({ baseUrl: 'https://hacker-news.firebaseio.com' });
+
+const initialState = {
+  articles: {},
+};
+const store = createStore(initialState);
+store.runSaga(rootSaga);
 
 render(
-  <App routes={routes} />,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App routes={routes} />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root'),
 );

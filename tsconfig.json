@@ -11,6 +11,7 @@
     "baseUrl": "./src/",
     "paths": {
       "@config/*": ["./config/*"],
+      "@app": ["./app"],
       "@app/*": ["./app/*"],
       "@routes": ["./routes"],
       "@features/*": ["./features/*"],
@@ -22,7 +23,8 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "global.t.ts"
   ],
   "exclude": [
     "node_modules",
