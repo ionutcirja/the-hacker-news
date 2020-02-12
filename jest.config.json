@@ -12,6 +12,8 @@
     "!src/reducers/**",
     "!src/routes/**",
     "!src/sagas/**",
-    "!src/config/**"
+    "!src/config/**",
+    "!src/style/**",
+    "!src/**/style.ts"
   ]
 }

@@ -6,6 +6,29 @@ import { shallow, mount } from 'enzyme';
 import { fireEvent, render } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import Container, { ArticlesListHOC, StateProps, DispatchProps } from '..';
+import ArticlesCounter from '../../../components/articles-counter';
+import ArticlesList from '../../../components/articles-list';
+
+jest.mock('../style', () => ({
+  Button: jest.fn().mockImplementation(({ children, ...rest }) => (
+    <button type="button" {...rest}>{children}</button>
+  )),
+}));
+
+jest.mock('@style/components', () => ({
+  Row: jest.fn().mockImplementation(({ children }) => <div>{children}</div>),
+  Section: jest.fn().mockImplementation(({ children }) => <section>{children}</section>),
+  Loader: jest.fn().mockImplementation(({ children }) => <span>{children}</span>),
+  Error: jest.fn().mockImplementation(({ children }) => <p>{children}</p>),
+}));
+
+jest.mock('../../../components/articles-list', () => (
+  jest.fn(({ children }) => <ul>{children}</ul>)
+));
+
+jest.mock('../../../components/articles-counter', () => (
+  jest.fn(({ children }) => <p>{children}</p>)
+));
 
 describe('ArticlesList container', () => {
   const history = createMemoryHistory();
@@ -65,7 +88,7 @@ describe('ArticlesList container', () => {
     it('should render an ArticlesCounter component if articlesList prop value length is bigger than zero', () => {
       props.articlesNum = 2;
       const output = shallow(<ArticlesListHOC {...props} />);
-      const counter = output.find('ArticlesCounter');
+      const counter = output.find(ArticlesCounter);
       expect(counter.length).toEqual(1);
       expect(counter.props()).toMatchObject({
         num: props.articlesNum,
@@ -84,7 +107,7 @@ describe('ArticlesList container', () => {
         },
       };
       const output = shallow(<ArticlesListHOC {...props} />);
-      const list = output.find('ArticlesList');
+      const list = output.find(ArticlesList);
       expect(list.length).toEqual(1);
       expect(list.props()).toMatchObject({
         list: props.articlesContent,

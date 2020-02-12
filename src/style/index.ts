@@ -169,6 +169,10 @@ const GlobalStyle = createGlobalStyle`
   *:focus {
     outline: none;
   }
+  
+  #root {
+    padding: 20px;
+  }
 `;
 
 export default GlobalStyle;

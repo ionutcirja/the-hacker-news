@@ -11,6 +11,23 @@ import Container, {
   OwnProps,
   DispatchProps,
 } from '..';
+import { BackLink } from '../style';
+import Article from '../../../components/article';
+
+jest.mock('@style/components', () => ({
+  Row: jest.fn().mockImplementation(({ children }) => <div>{children}</div>),
+  Section: jest.fn().mockImplementation(({ children }) => <section>{children}</section>),
+  Loader: jest.fn().mockImplementation(({ children }) => <span>{children}</span>),
+  Error: jest.fn().mockImplementation(({ children }) => <p>{children}</p>),
+}));
+
+jest.mock('../style', () => ({
+  BackLink: jest.fn().mockImplementation(({ children, ...rest }) => <a {...rest}>{children}</a>),
+}));
+
+jest.mock('../../../components/article', () => (
+  jest.fn(({ children }) => <div>{children}</div>)
+));
 
 describe('Article container', () => {
   const history = createMemoryHistory();
@@ -67,7 +84,7 @@ describe('Article container', () => {
   describe('render', () => {
     it('should render a link to the dashboard', () => {
       const output = shallow(<ArticleHOC {...props} />);
-      const link = output.find('Link');
+      const link = output.find(BackLink);
       expect(link.length).toEqual(1);
     });
 
@@ -83,7 +100,7 @@ describe('Article container', () => {
 
     it('should render an Article component if article prop value is defined', () => {
       const output = shallow(<ArticleHOC {...props} />);
-      const article = output.find('Article');
+      const article = output.find(Article);
       expect(article.length).toEqual(1);
       expect(article.props()).toMatchObject({
         ...props.article,

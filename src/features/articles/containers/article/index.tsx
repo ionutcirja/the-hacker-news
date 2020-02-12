@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { DASHBOARD_PATH } from '@routes';
+import { Section, Row, Loader } from '@style/components';
 import { fetchArticlesContentRequest } from '../../actions';
 import { articleSelector } from '../../selectors';
 import Article from '../../components/article';
+import { BackLink } from './style';
 
 export type StateProps = {
   article?: ArticleContent;
@@ -45,11 +46,23 @@ export const ArticleHOC: React.FC<StateProps & OwnProps & DispatchProps> = ({
   }, [match.params.id]);
 
   return (
-    <>
-      <Link to={DASHBOARD_PATH}>Back to articles list</Link>
-      {loading && <p>Loading...</p>}
-      {article && <Article {...article} />}
-    </>
+    <Section>
+      <Row>
+        <BackLink to={DASHBOARD_PATH}>
+          Back to articles list
+        </BackLink>
+      </Row>
+      {loading && (
+        <Row>
+          <Loader>Loading...</Loader>
+        </Row>
+      )}
+      {article && (
+        <Row>
+          <Article {...article} />
+        </Row>
+      )}
+    </Section>
   );
 };
 

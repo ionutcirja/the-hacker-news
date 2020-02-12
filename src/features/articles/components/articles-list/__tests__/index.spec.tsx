@@ -1,9 +1,16 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
+import { Router, Link } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { shallow } from 'enzyme';
 import { render } from '@testing-library/react';
 import ArticlesList from '..';
+import { ArticleLink } from '../style';
+
+jest.mock('../style', () => ({
+  List: jest.fn().mockImplementation(({ children }) => <ul>{children}</ul>),
+  ListItem: jest.fn().mockImplementation(({ children }) => <li>{children}</li>),
+  ArticleLink: jest.fn().mockImplementation(({ children, ...rest }) => <a {...rest}>{children}</a>),
+}));
 
 describe('ArticlesList component', () => {
   const props = {
@@ -29,7 +36,7 @@ describe('ArticlesList component', () => {
 
   it('should render a list of links to the article pages', () => {
     const output = shallow(<ArticlesList {...props} />);
-    const links = output.find('Link');
+    const links = output.find(ArticleLink);
     expect(links.length).toEqual(2);
     const keys = Object.keys(props.list);
     keys.forEach((key, index) => {
@@ -49,7 +56,6 @@ describe('ArticlesList component', () => {
     );
     Object.keys(props.list).forEach((key) => {
       expect(getByText(props.list[key].title)).toBeDefined();
-      expect(getByText(props.list[key].by)).toBeDefined();
     });
   });
 });

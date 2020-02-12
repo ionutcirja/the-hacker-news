@@ -2,6 +2,14 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import Article from '..';
 
+jest.mock('../style', () => ({
+  Title: jest.fn().mockImplementation(({ children }) => <h1>{children}</h1>),
+  Author: jest.fn().mockImplementation(({ children }) => <h2>{children}</h2>),
+  Date: jest.fn().mockImplementation(({ children }) => <p>{children}</p>),
+  Rating: jest.fn().mockImplementation(({ children }) => <p>{children}</p>),
+  Link: jest.fn().mockImplementation(({ children, ...rest }) => <a {...rest}>{children}</a>),
+}));
+
 describe('Article component', () => {
   const props = {
     id: 1234,

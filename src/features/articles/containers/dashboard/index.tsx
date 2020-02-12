@@ -2,10 +2,17 @@ import React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Maybe } from 'monet';
+import {
+  Section,
+  Row,
+  Loader,
+  Error,
+} from '@style/components';
 import { fetchArticlesListRequest, fetchArticlesContentRequest } from '../../actions';
 import { articlesListSelector, articlesListLengthSelector, articlesContentSelector } from '../../selectors';
 import ArticlesCounter from '../../components/articles-counter';
 import ArticlesList from '../../components/articles-list';
+import { Button } from './style';
 
 export type StateProps = {
   articlesList?: number[];
@@ -59,23 +66,41 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
   };
 
   return (
-    <>
-      {loading && <p>Loading...</p>}
-      {error && <p>Something happened on our end. Please try again later.</p>}
-      {Maybe.fromNull(articlesNum)
-        .map((value: number) => <ArticlesCounter num={articlesNum} />)
-        .orSome(null)}
-      {articlesContent && <ArticlesList list={articlesContent} />}
-      {articlesContent && loadedArticlesNum < articlesNum && (
-        <button
-          type="button"
-          disabled={loading}
-          onClick={onLoadClickHandler}
-        >
-          Load more
-        </button>
+    <Section>
+      {error && (
+        <Row>
+          <Error>Something happened on our end. Please try again later.</Error>
+        </Row>
       )}
-    </>
+      {Maybe.fromNull(articlesNum)
+        .map((value: number) => (
+          <Row>
+            <ArticlesCounter num={articlesNum} />
+          </Row>
+        ))
+        .orSome(null)}
+      {articlesContent && (
+        <Row>
+          <ArticlesList list={articlesContent} />
+        </Row>
+      )}
+      {loading && (
+        <Row>
+          <Loader>Loading...</Loader>
+        </Row>
+      )}
+      {articlesContent && loadedArticlesNum < articlesNum && (
+        <Row>
+          <Button
+            type="button"
+            disabled={loading}
+            onClick={onLoadClickHandler}
+          >
+            Load more
+          </Button>
+        </Row>
+      )}
+    </Section>
   );
 };
 

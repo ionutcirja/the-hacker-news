@@ -1,3 +1,26 @@
+import 'styled-components';
+
+declare module 'styled-components' {
+  export type Theme = {
+    colors: {
+      darkGrey: string;
+      grey: string;
+      blue: string;
+      darkBlue: string;
+      red: string;
+      turquoise: string;
+      white: string;
+    };
+    breakpoints: {
+      xxsmall: string;
+      xsmall: string;
+      small: string;
+      medium: string;
+      large: string;
+    };
+  }
+}
+
 declare global {
   type ArticleContent = {
     readonly id: number;

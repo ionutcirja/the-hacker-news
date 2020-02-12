@@ -2,6 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import ArticlesCounter from '..';
 
+jest.mock('../style', () => ({
+  Text: jest.fn().mockImplementation(({ children }) => <p>{children}</p>),
+}));
+
 describe('ArticlesCounter component', () => {
   it('should render the number of articles ', () => {
     let output = render(<ArticlesCounter num={1} />);
