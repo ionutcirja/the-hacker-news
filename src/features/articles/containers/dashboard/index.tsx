@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Maybe } from 'monet';
 import { fetchArticlesListRequest } from '../../actions';
 import { articlesListLengthSelector } from '../../selectors';
 import ArticlesCounter from '../../components/articles-counter';
@@ -31,7 +32,9 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
     <>
       {loading && <p>Loading...</p>}
       {error && <p>Something happened on our end. Please try again later.</p>}
-      {articlesNum && <ArticlesCounter num={articlesNum} />}
+      {Maybe.fromNull(articlesNum)
+        .map((value: number) => <ArticlesCounter num={articlesNum} />)
+        .orSome(null)}
     </>
   );
 };

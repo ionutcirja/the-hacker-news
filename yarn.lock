@@ -5711,6 +5711,11 @@ mkdirp@0.5.1, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+monet@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/monet/-/monet-0.9.1.tgz#89686a22d9dd8a6228fcde5265fcd86aa63981a7"
+  integrity sha512-GaZw308g6t0WD+U2mGujwJckGp2b8AGGVuB6PiIwkXbq6rJeiqddre2mdbO4PxjyILPi+7GgtRkkfr6dBYXWtA==
+
 moo@^0.5.0:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/moo/-/moo-0.5.1.tgz#7aae7f384b9b09f620b6abf6f74ebbcd1b65dbc4"

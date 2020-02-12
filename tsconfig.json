@@ -5,7 +5,7 @@
     "jsx": "preserve",
     "allowJs": true,
     "noEmit": true,
-    "strict": true,
+    "strict": false,
     "isolatedModules": true,
     "esModuleInterop": true,
     "baseUrl": "./src/",
