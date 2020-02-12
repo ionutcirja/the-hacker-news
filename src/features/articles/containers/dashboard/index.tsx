@@ -9,14 +9,20 @@ import {
   Error,
 } from '@style/components';
 import { fetchArticlesListRequest, fetchArticlesContentRequest } from '../../actions';
-import { articlesListSelector, articlesListLengthSelector, articlesContentSelector } from '../../selectors';
+import {
+  articlesListSelector,
+  articlesListLengthSelector,
+  articlesContentSelector,
+  loadedArticlesListLengthSelector,
+} from '../../selectors';
 import ArticlesCounter from '../../components/articles-counter';
 import ArticlesList from '../../components/articles-list';
 import { Button } from './style';
 
 export type StateProps = {
   articlesList?: number[];
-  articlesNum?: number;
+  articlesNum: number;
+  loadedArticlesNum: number;
   articlesContent?: {
     [id: number]: ArticleContent;
   };
@@ -42,11 +48,10 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
   loading,
   error,
   articlesNum,
+  loadedArticlesNum,
   articlesList,
   articlesContent,
 }: StateProps & DispatchProps) => {
-  const [loadedArticlesNum, setLoadedArticlesNum] = React.useState<number>(0);
-
   React.useEffect(() => {
     if (!articlesNum) {
       actions.fetchArticlesListRequest();
@@ -54,15 +59,17 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
   }, []);
 
   React.useEffect(() => {
-    if (articlesNum > 0) {
+    if (articlesNum > 0 && loadedArticlesNum === 0) {
       actions.fetchArticlesContentRequest({
-        list: articlesList.slice(loadedArticlesNum, loadedArticlesNum + GROUP_ARTICLES_NUM),
+        list: articlesList.slice(0, GROUP_ARTICLES_NUM),
       });
     }
-  }, [articlesNum, loadedArticlesNum]);
+  }, [articlesNum]);
 
   const onLoadClickHandler = () => {
-    setLoadedArticlesNum(loadedArticlesNum + GROUP_ARTICLES_NUM);
+    actions.fetchArticlesContentRequest({
+      list: articlesList.slice(loadedArticlesNum, loadedArticlesNum + GROUP_ARTICLES_NUM),
+    });
   };
 
   return (
@@ -107,6 +114,7 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
 const mapStateToProps = (state: State): StateProps => ({
   articlesList: articlesListSelector(state),
   articlesNum: articlesListLengthSelector(state),
+  loadedArticlesNum: loadedArticlesListLengthSelector(state),
   articlesContent: articlesContentSelector(state),
   loading: state.articles.loading,
   error: state.articles.error,

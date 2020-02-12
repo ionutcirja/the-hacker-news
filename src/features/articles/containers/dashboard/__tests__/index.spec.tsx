@@ -63,6 +63,8 @@ describe('ArticlesList container', () => {
 
   beforeEach(() => {
     props = {
+      articlesNum: 0,
+      loadedArticlesNum: 0,
       loading: false,
       error: false,
       actions: {
@@ -116,13 +118,15 @@ describe('ArticlesList container', () => {
   });
 
   describe('mount', () => {
-    it('should call call fetchArticlesListRequest action', () => {
+    it('should call call fetchArticlesListRequest action if articlesNum prop value is zero', () => {
       render(<ArticlesListHOC {...props} />);
       expect(props.actions.fetchArticlesListRequest).toHaveBeenCalled();
     });
 
-    it('should call call fetchArticlesContentRequest action if articles number is bigger than zero', () => {
+    it('should call call fetchArticlesContentRequest action if articles number is bigger than zero'
+      + ' and loadedArticlesNum value is zero', () => {
       props.articlesNum = 4;
+      props.loadedArticlesNum = 0;
       props.articlesList = [123, 456, 678, 789];
       render(<ArticlesListHOC {...props} />);
       expect(props.actions.fetchArticlesContentRequest).toHaveBeenCalledWith({
@@ -133,7 +137,8 @@ describe('ArticlesList container', () => {
 
   describe('events handlers', () => {
     it('should load the next group of articles on load more button click', () => {
-      props.articlesNum = 4;
+      props.articlesNum = 14;
+      props.loadedArticlesNum = 10;
       props.articlesList = [123, 456, 678, 789, 653, 655, 756, 757, 324, 654, 325, 324, 987];
       props.articlesContent = {
         123: {
@@ -151,12 +156,9 @@ describe('ArticlesList container', () => {
         </Router>,
       );
       fireEvent.click(getByText(/load more/i));
-      expect((props.actions.fetchArticlesContentRequest as jest.Mock).mock.calls[1]).toEqual([
-        {
-          list: [325, 324, 987],
-        },
-      ]);
-      expect(() => getByText(/load more/i)).toThrow();
+      expect(props.actions.fetchArticlesContentRequest).toHaveBeenCalledWith({
+        list: [325, 324, 987],
+      });
     });
   });
 
