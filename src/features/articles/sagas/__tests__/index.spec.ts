@@ -1,18 +1,28 @@
-import { call, takeLatest, put } from 'redux-saga/effects';
 import {
+  call,
+  takeLatest,
+  put,
+  all,
+} from 'redux-saga/effects';
+import {
+  fetchArticleContent,
   fetchArticlesList,
 } from '../../services';
 import {
   watchArticlesRequests,
   fetchArticlesListRequest,
+  fetchArticlesContentRequest,
 } from '..';
 
 describe('Articles sagas', () => {
   describe('watchArticlesRequests', () => {
-    it('should wait for a FETCH_ARTICLES_LIST_REQUEST action', () => {
+    it('should wait for a list of requests actions', () => {
       const generator = watchArticlesRequests();
       expect(generator.next().value).toEqual(
         takeLatest('FETCH_ARTICLES_LIST_REQUEST', fetchArticlesListRequest),
+      );
+      expect(generator.next().value).toEqual(
+        takeLatest('FETCH_ARTICLES_CONTENT_REQUEST', fetchArticlesContentRequest),
       );
       expect(generator.next().done).toEqual(true);
     });
@@ -48,6 +58,50 @@ describe('Articles sagas', () => {
           }),
         );
       }
+      expect(generator.next().done).toEqual(true);
+    });
+  });
+
+  describe('fetchArticlesContentRequest', () => {
+    it('should call fetchArticleContent services method for every article id and'
+      + ' dispatch a FETCH_ARTICLES_CONTENT_SUCCESS action in case of success', () => {
+      const data = [
+        {
+          data: {
+            id: 123,
+            title: 'some title',
+          },
+        },
+        {
+          data: {
+            id: 567,
+            title: 'another title',
+          },
+        },
+      ];
+      const generator = fetchArticlesContentRequest({
+        type: 'ACTION',
+        payload: { list: [123, 567] },
+      });
+      expect(generator.next().value).toEqual(all([
+        call(fetchArticleContent, 123),
+        call(fetchArticleContent, 567),
+      ]));
+      expect(generator.next(data).value).toEqual(
+        put({
+          type: 'FETCH_ARTICLES_CONTENT_SUCCESS',
+          payload: {
+            list: {
+              123: {
+                ...data[0].data,
+              },
+              567: {
+                ...data[1].data,
+              },
+            },
+          },
+        }),
+      );
       expect(generator.next().done).toEqual(true);
     });
   });

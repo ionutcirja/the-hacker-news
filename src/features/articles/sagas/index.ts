@@ -1,11 +1,20 @@
+import { AnyAction } from 'redux';
 import { SagaIterator } from 'redux-saga';
-import { takeLatest, call, put } from 'redux-saga/effects';
+import {
+  takeLatest,
+  call,
+  put,
+  all,
+} from 'redux-saga/effects';
 import {
   FETCH_ARTICLES_LIST_REQUEST,
+  FETCH_ARTICLES_CONTENT_REQUEST,
   fetchArticlesListSuccess,
   fetchArticlesListError,
+  fetchArticlesContentSuccess,
+  fetchArticlesContentError,
 } from '../actions';
-import { fetchArticlesList } from '../services';
+import { fetchArticlesList, fetchArticleContent } from '../services';
 
 export function* fetchArticlesListRequest(): SagaIterator {
   try {
@@ -16,6 +25,21 @@ export function* fetchArticlesListRequest(): SagaIterator {
   }
 }
 
+export function* fetchArticlesContentRequest(action: AnyAction): SagaIterator {
+  const { list } = action.payload;
+  try {
+    const requests = list.map((id: number) => call(fetchArticleContent, id));
+    const result = yield all(requests);
+    yield put(fetchArticlesContentSuccess({
+      list: result.reduce((acc, curr) => ({ ...acc, [curr.data.id]: curr.data }), {}),
+    }));
+  } catch (error) {
+    // TODO it seems the api always returns a 200 on this endpoint event when the id id not valid
+    // yield put(fetchArticlesContentError({ error: true }));
+  }
+}
+
 export function* watchArticlesRequests(): SagaIterator {
   yield takeLatest(FETCH_ARTICLES_LIST_REQUEST, fetchArticlesListRequest);
+  yield takeLatest(FETCH_ARTICLES_CONTENT_REQUEST, fetchArticlesContentRequest);
 }
