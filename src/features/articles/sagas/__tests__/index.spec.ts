@@ -91,7 +91,7 @@ describe('Articles sagas', () => {
         put({
           type: 'FETCH_ARTICLES_CONTENT_SUCCESS',
           payload: {
-            list: {
+            content: {
               123: {
                 ...data[0].data,
               },

@@ -31,7 +31,7 @@ export function* fetchArticlesContentRequest(action: AnyAction): SagaIterator {
     const requests = list.map((id: number) => call(fetchArticleContent, id));
     const result = yield all(requests);
     yield put(fetchArticlesContentSuccess({
-      list: result.reduce((acc, curr) => ({ ...acc, [curr.data.id]: curr.data }), {}),
+      content: result.reduce((acc, curr) => ({ ...acc, [curr.data.id]: curr.data }), {}),
     }));
   } catch (error) {
     // TODO it seems the api always returns a 200 on this endpoint event when the id id not valid

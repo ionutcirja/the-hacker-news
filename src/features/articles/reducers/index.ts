@@ -6,6 +6,8 @@ import {
   fetchArticlesListRequest,
   fetchArticlesListSuccess,
   fetchArticlesListError,
+  fetchArticlesContentRequest,
+  fetchArticlesContentSuccess,
 } from '../actions';
 
 export default handleActions({
@@ -19,5 +21,12 @@ export default handleActions({
   [fetchArticlesListError]: produce((state: Draft<Articles>) => {
     state.loading = false;
     state.error = true;
+  }),
+  [fetchArticlesContentRequest]: produce((state: Draft<Articles>) => {
+    state.loading = true;
+  }),
+  [fetchArticlesContentSuccess]: produce((state: Draft<Articles>, action: AnyAction) => {
+    state.loading = false;
+    state.content = { ...(state.content || {}), ...action.payload.content };
   }),
 }, {});
