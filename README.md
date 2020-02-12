@@ -1,5 +1,17 @@
 # The Hacker News
 
+## Technologies used (not all of this are really necessary for this small project, but I tried to structure my architecture as I would do for a larger project):
+
+- TypeScript
+- React
+- Redux
+- Redux-Saga
+- Styled Components
+- Jest
+- Enzyme
+- React-Testing-Library
+
+
 ## Install
 
 ```
