@@ -1,6 +1,8 @@
 # The Hacker News
 
-## Technologies used (not all of this are really necessary for this small project, but I tried to structure my architecture as I would do for a larger project):
+## Technologies used:
+
+Note: not all of this are really necessary for this small project, but I tried to structure the architecture as I would do for a larger project.
 
 - TypeScript
 - React
