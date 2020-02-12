@@ -11,7 +11,7 @@ export default [
     component: Dashboard,
   },
   {
-    path: ARTICLE_PATH,
+    path: `${ARTICLE_PATH}:id`,
     component: Article,
   },
   {
