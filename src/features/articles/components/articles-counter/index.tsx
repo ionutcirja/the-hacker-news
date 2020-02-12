@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 type Props = {
   num: number;
 }
 
-const ArticlesCounter: FC<Props> = ({ num }: Props) => (
+const ArticlesCounter: React.FC<Props> = ({ num }: Props) => (
   <p>{`We found ${num} new ${num === 1 ? 'article' : 'articles'}.`}</p>
 );
 

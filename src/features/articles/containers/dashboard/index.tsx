@@ -1,11 +1,12 @@
-import React, { FC, useEffect } from 'react';
+import React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { fetchArticlesListRequest } from '../../actions';
+import { articlesListLengthSelector } from '../../selectors';
 import ArticlesCounter from '../../components/articles-counter';
 
 export type StateProps = {
-  articlesList?: number[];
+  articlesNum?: number;
   loading?: boolean;
   error?: boolean;
 };
@@ -16,13 +17,13 @@ export type DispatchProps = {
   };
 }
 
-export const ArticlesListHOC: FC<StateProps & DispatchProps> = ({
+export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
   actions,
   loading,
   error,
-  articlesList,
+  articlesNum,
 }: StateProps & DispatchProps) => {
-  useEffect(() => {
+  React.useEffect(() => {
     actions.fetchArticlesListRequest();
   }, []);
 
@@ -30,13 +31,13 @@ export const ArticlesListHOC: FC<StateProps & DispatchProps> = ({
     <>
       {loading && <p>Loading...</p>}
       {error && <p>Something happened on our end. Please try again later.</p>}
-      {articlesList && <ArticlesCounter num={articlesList.length} />}
+      {articlesNum && <ArticlesCounter num={articlesNum} />}
     </>
   );
 };
 
 const mapStateToProps = (state: State): StateProps => ({
-  articlesList: state.articles.list,
+  articlesNum: articlesListLengthSelector(state),
   loading: state.articles.loading,
   error: state.articles.error,
 });

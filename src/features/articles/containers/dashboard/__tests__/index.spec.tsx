@@ -21,7 +21,6 @@ describe('ArticlesList container', () => {
     props = {
       loading: false,
       error: false,
-      articlesList: [],
       actions: {
         fetchArticlesListRequest: jest.fn(),
       },
@@ -42,12 +41,12 @@ describe('ArticlesList container', () => {
     });
 
     it('should render an ArticlesCounter if articlesList prop value length is bigger than zero', () => {
-      props.articlesList = [123, 456, 756];
+      props.articlesNum = 2;
       const output = shallow(<ArticlesListHOC {...props} />);
       const counter = output.find('ArticlesCounter');
       expect(counter.length).toEqual(1);
       expect(counter.props()).toMatchObject({
-        num: props.articlesList.length,
+        num: props.articlesNum,
       });
     });
   });
@@ -69,7 +68,7 @@ describe('ArticlesList container', () => {
       expect(output.find(ArticlesListHOC).props()).toMatchObject({
         loading: state.articles.loading,
         error: state.articles.error,
-        articlesList: state.articles.list,
+        articlesNum: 4,
       });
     });
   });
