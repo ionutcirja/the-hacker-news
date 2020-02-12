@@ -31,10 +31,11 @@ describe('ArticlesList component', () => {
     const output = shallow(<ArticlesList {...props} />);
     const links = output.find('Link');
     expect(links.length).toEqual(2);
-    Object.keys(props.list).forEach((key, index) => {
+    const keys = Object.keys(props.list);
+    keys.forEach((key, index) => {
       const link = links.at(index);
       expect(link.props()).toMatchObject({
-        to: `/articles/${props.list[key].id}`,
+        to: `/articles/${props.list[keys[keys.length - index - 1]].id}`,
       });
     });
   });
