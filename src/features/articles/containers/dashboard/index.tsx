@@ -28,7 +28,7 @@ export type DispatchProps = {
   };
 }
 
-const GROUP_ARTICLES_NUM = 3;
+const GROUP_ARTICLES_NUM = 10;
 
 export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
   actions,
@@ -54,6 +54,10 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
     }
   }, [articlesNum, loadedArticlesNum]);
 
+  const onLoadClickHandler = () => {
+    setLoadedArticlesNum(loadedArticlesNum + GROUP_ARTICLES_NUM);
+  };
+
   return (
     <>
       {loading && <p>Loading...</p>}
@@ -62,6 +66,15 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
         .map((value: number) => <ArticlesCounter num={articlesNum} />)
         .orSome(null)}
       {articlesContent && <ArticlesList list={articlesContent} />}
+      {articlesContent && loadedArticlesNum < articlesNum && (
+        <button
+          type="button"
+          disabled={loading}
+          onClick={onLoadClickHandler}
+        >
+          Load more
+        </button>
+      )}
     </>
   );
 };

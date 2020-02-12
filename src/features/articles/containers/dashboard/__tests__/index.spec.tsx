@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
-import { getByText, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import Container, { ArticlesListHOC, StateProps, DispatchProps } from '..';
 
@@ -52,14 +52,14 @@ describe('ArticlesList container', () => {
   describe('render', () => {
     it('should render a loading message if the loading prop value is truthy', () => {
       props.loading = true;
-      const { container } = render(<ArticlesListHOC {...props} />);
-      expect(getByText(container, /loading/i)).toBeDefined();
+      const { getByText } = render(<ArticlesListHOC {...props} />);
+      expect(getByText(/loading/i)).toBeDefined();
     });
 
     it('should render an error message if the error prop value is truthy', () => {
       props.error = true;
-      const { container } = render(<ArticlesListHOC {...props} />);
-      expect(getByText(container, /something happened/i)).toBeDefined();
+      const { getByText } = render(<ArticlesListHOC {...props} />);
+      expect(getByText(/something happened/i)).toBeDefined();
     });
 
     it('should render an ArticlesCounter component if articlesList prop value length is bigger than zero', () => {
@@ -103,8 +103,37 @@ describe('ArticlesList container', () => {
       props.articlesList = [123, 456, 678, 789];
       render(<ArticlesListHOC {...props} />);
       expect(props.actions.fetchArticlesContentRequest).toHaveBeenCalledWith({
-        list: [123, 456, 678],
+        list: [123, 456, 678, 789],
       });
+    });
+  });
+
+  describe('events handlers', () => {
+    it('should load the next group of articles on load more button click', () => {
+      props.articlesNum = 4;
+      props.articlesList = [123, 456, 678, 789, 653, 655, 756, 757, 324, 654, 325, 324, 987];
+      props.articlesContent = {
+        123: {
+          id: 123,
+          title: 'title',
+          by: 'John',
+          time: 432432,
+          url: 'http://domain.com',
+          score: 1,
+        },
+      };
+      const { getByText } = render(
+        <Router history={history}>
+          <ArticlesListHOC {...props} />
+        </Router>,
+      );
+      fireEvent.click(getByText(/load more/i));
+      expect((props.actions.fetchArticlesContentRequest as jest.Mock).mock.calls[1]).toEqual([
+        {
+          list: [325, 324, 987],
+        },
+      ]);
+      expect(() => getByText(/load more/i)).toThrow();
     });
   });
 
