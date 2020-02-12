@@ -6,6 +6,12 @@
   "setupFilesAfterEnv": ["./config/enzyme.js"],
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
-    "!**/node_modules/**"
+    "!**/node_modules/**",
+    "!src/index.tsx",
+    "!src/store/**",
+    "!src/reducers/**",
+    "!src/routes/**",
+    "!src/sagas/**",
+    "!src/config/**"
   ]
 }
