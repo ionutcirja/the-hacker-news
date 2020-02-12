@@ -1,4 +1,6 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import { getByText, render } from '@testing-library/react';
@@ -6,12 +8,31 @@ import configureMockStore from 'redux-mock-store';
 import Container, { ArticlesListHOC, StateProps, DispatchProps } from '..';
 
 describe('ArticlesList container', () => {
+  const history = createMemoryHistory();
   const createMockStore = configureMockStore();
   const state = {
     articles: {
       loading: false,
       error: false,
       list: [123, 432, 564, 654],
+      content: {
+        123: {
+          title: 'some title',
+          id: 123,
+          by: 'John',
+          score: 1,
+          url: 'http://domain.com',
+          time: 1234556,
+        },
+        456: {
+          title: 'another title',
+          id: 456,
+          by: 'John',
+          score: 1,
+          url: 'http://domain.com',
+          time: 1234556,
+        },
+      },
     },
   };
   const store = createMockStore(state);
@@ -23,6 +44,7 @@ describe('ArticlesList container', () => {
       error: false,
       actions: {
         fetchArticlesListRequest: jest.fn(),
+        fetchArticlesContentRequest: jest.fn(),
       },
     };
   });
@@ -40,13 +62,32 @@ describe('ArticlesList container', () => {
       expect(getByText(container, /something happened/i)).toBeDefined();
     });
 
-    it('should render an ArticlesCounter if articlesList prop value length is bigger than zero', () => {
+    it('should render an ArticlesCounter component if articlesList prop value length is bigger than zero', () => {
       props.articlesNum = 2;
       const output = shallow(<ArticlesListHOC {...props} />);
       const counter = output.find('ArticlesCounter');
       expect(counter.length).toEqual(1);
       expect(counter.props()).toMatchObject({
         num: props.articlesNum,
+      });
+    });
+
+    it('should render an ArticlesList component if articlesContent prop value is defined', () => {
+      props.articlesContent = {
+        123: {
+          id: 123,
+          title: 'title',
+          by: 'John',
+          time: 432432,
+          url: 'http://domain.com',
+          score: 1,
+        },
+      };
+      const output = shallow(<ArticlesListHOC {...props} />);
+      const list = output.find('ArticlesList');
+      expect(list.length).toEqual(1);
+      expect(list.props()).toMatchObject({
+        list: props.articlesContent,
       });
     });
   });
@@ -56,19 +97,32 @@ describe('ArticlesList container', () => {
       render(<ArticlesListHOC {...props} />);
       expect(props.actions.fetchArticlesListRequest).toHaveBeenCalled();
     });
+
+    it('should call call fetchArticlesContentRequest action if articles number is bigger than zero', () => {
+      props.articlesNum = 4;
+      props.articlesList = [123, 456, 678, 789];
+      render(<ArticlesListHOC {...props} />);
+      expect(props.actions.fetchArticlesContentRequest).toHaveBeenCalledWith({
+        list: [123, 456, 678],
+      });
+    });
   });
 
   describe('mapStateToProps', () => {
     it('should pass state article props', () => {
       const output = mount(
         <Provider store={store}>
-          <Container />
+          <Router history={history}>
+            <Container />
+          </Router>
         </Provider>,
       );
       expect(output.find(ArticlesListHOC).props()).toMatchObject({
         loading: state.articles.loading,
         error: state.articles.error,
         articlesNum: 4,
+        articlesList: state.articles.list,
+        articlesContent: state.articles.content,
       });
     });
   });
@@ -77,7 +131,9 @@ describe('ArticlesList container', () => {
     it('should bind the necessary actions to props', () => {
       const output = mount(
         <Provider store={store}>
-          <Container />
+          <Router history={history}>
+            <Container />
+          </Router>
         </Provider>,
       );
       expect(output.find(ArticlesListHOC).props().actions.fetchArticlesListRequest).toBeDefined();
