@@ -1,17 +1,17 @@
-import React, { FC, ComponentType } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router';
 
 type RouteProps = {
   path: string;
   exact?: boolean;
-  component: ComponentType<any>;
+  component: React.ComponentType<any>;
 }
 
 type Props = {
   routes: RouteProps[];
 }
 
-const App: FC<Props> = ({ routes }: Props) => (
+const App: React.FC<Props> = ({ routes }: Props) => (
   <Switch>
     {routes.map((route: RouteProps) => (
       <Route
