@@ -38,7 +38,7 @@ export function* fetchArticlesContentRequest(action: AnyAction): SagaIterator {
       }), {}),
     }));
   } catch (error) {
-    // TODO it seems the api always returns a 200 on this endpoint event when the id id not valid
+    // TODO it seems the api always returns a 200 on this endpoint event when the id is not valid
     // yield put(fetchArticlesContentError({ error: true }));
   }
 }

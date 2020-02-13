@@ -87,7 +87,7 @@ describe('ArticlesList container', () => {
       expect(getByText(/something happened/i)).toBeDefined();
     });
 
-    it('should render an ArticlesCounter component if articlesList prop value length is bigger than zero', () => {
+    it('should render an ArticlesCounter component if articlesNum prop value is bigger than zero', () => {
       props.articlesNum = 2;
       const output = shallow(<ArticlesListHOC {...props} />);
       const counter = output.find(ArticlesCounter);
@@ -118,13 +118,13 @@ describe('ArticlesList container', () => {
   });
 
   describe('mount', () => {
-    it('should call call fetchArticlesListRequest action if articlesNum prop value is zero', () => {
+    it('should call fetchArticlesListRequest action if articlesNum prop value is zero', () => {
       render(<ArticlesListHOC {...props} />);
       expect(props.actions.fetchArticlesListRequest).toHaveBeenCalled();
     });
 
-    it('should call call fetchArticlesContentRequest action if articles number is bigger than zero'
-      + ' and loadedArticlesNum value is zero', () => {
+    it('should call fetchArticlesContentRequest action if articlesNum prop value is bigger than zero'
+      + ' and loadedArticlesNum prop value is zero', () => {
       props.articlesNum = 4;
       props.loadedArticlesNum = 0;
       props.articlesList = [123, 456, 678, 789];

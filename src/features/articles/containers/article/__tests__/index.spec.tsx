@@ -109,7 +109,7 @@ describe('Article container', () => {
   });
 
   describe('mount', () => {
-    it('should call call fetchArticlesContentRequest action if article prop value is falsy', () => {
+    it('should call fetchArticlesContentRequest action if article prop value is falsy', () => {
       props.article = null;
       render(
         <Router history={history}>

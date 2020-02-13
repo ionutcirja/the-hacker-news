@@ -47,7 +47,7 @@ describe('ArticlesList component', () => {
     });
   });
 
-  it('should render the title and the author of every article', () => {
+  it('should render the title of every article', () => {
     const history = createMemoryHistory();
     const { getByText } = render(
       <Router history={history}>
