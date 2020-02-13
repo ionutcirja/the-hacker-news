@@ -14,6 +14,10 @@ export const Button = styled.button`
   color: ${(props) => props.theme.colors.white};
   text-decoration: none;
   cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -22,9 +26,5 @@ export const Button = styled.button`
     &:hover {
       text-decoration: none;
     }
-  }
-
-  &:hover {
-    text-decoration: underline;
   }
 `;

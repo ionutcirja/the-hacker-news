@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "pre-commit": [
     "check-types",
-    "lint",
+    "lint:js",
+    "lint:css",
     "test"
   ],
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.config --progress --colors --host 0.0.0.0 --port 8080 --open",
-    "lint": "eslint './src/**'",
+    "lint:js": "eslint './src/**'",
+    "lint:css": "stylelint './src/**'",
     "test": "jest --config jest.config.json",
     "test:watch": "jest --watch --config jest.config.json",
     "test:watchAll": "jest --watchAll --config jest.config.json",
@@ -70,6 +72,10 @@
     "pre-commit": "^1.2.2",
     "redux-mock-store": "^1.5.4",
     "source-map-loader": "^0.2.4",
+    "stylelint": "^13.1.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.9.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
     "webpack": "^4.41.5",
