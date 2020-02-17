@@ -1,7 +1,6 @@
 import React from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Maybe } from 'monet';
 import {
   Section,
   Row,
@@ -79,21 +78,19 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
           <Error>Something happened on our end. Please try again later.</Error>
         </Row>
       )}
-      {Maybe.fromNull(articlesNum)
-        .map((value: number) => (
-          <Row>
-            <ArticlesCounter num={articlesNum} />
-          </Row>
-        ))
-        .orSome(null)}
+      {articlesNum > 0 && (
+        <Row>
+          <ArticlesCounter num={articlesNum} />
+        </Row>
+      )}
+      {loading && (articlesNum === 0 || loadedArticlesNum === 0) && (
+        <Row>
+          <Loader>Loading...</Loader>
+        </Row>
+      )}
       {articlesContent && (
         <Row>
           <ArticlesList list={articlesContent} />
-        </Row>
-      )}
-      {loading && (
-        <Row>
-          <Loader>Loading...</Loader>
         </Row>
       )}
       {articlesContent && loadedArticlesNum < articlesNum && (
@@ -103,7 +100,7 @@ export const ArticlesListHOC: React.FC<StateProps & DispatchProps> = ({
             disabled={loading}
             onClick={onLoadClickHandler}
           >
-            Load more
+            {loading ? 'Loading...' : 'Load more'}
           </Button>
         </Row>
       )}

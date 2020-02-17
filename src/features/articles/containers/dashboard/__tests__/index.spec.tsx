@@ -75,8 +75,20 @@ describe('ArticlesList container', () => {
   });
 
   describe('render', () => {
-    it('should render a loading message if the loading prop value is truthy', () => {
+    it('should render a loading message if the loading prop value is truthy and'
+      + ' articlesNum prop value is equal with zero', () => {
       props.loading = true;
+      props.articlesNum = 0;
+      const { getByText } = render(<ArticlesListHOC {...props} />);
+      expect(getByText(/loading/i)).toBeDefined();
+    });
+
+    it('should render a loading message if the loading prop value is truthy and'
+      + ' loadedArticlesNum prop value is equal with zero', () => {
+      props.loading = true;
+      props.articlesNum = 3;
+      props.articlesList = [1, 2, 3];
+      props.loadedArticlesNum = 0;
       const { getByText } = render(<ArticlesListHOC {...props} />);
       expect(getByText(/loading/i)).toBeDefined();
     });
