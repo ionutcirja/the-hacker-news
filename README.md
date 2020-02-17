@@ -8,7 +8,7 @@ Note: not all of this are really necessary for this small project, but I tried t
 - React
 - Redux
 - Redux-Saga
-- Styled Components
+- Styled-Components
 - Jest
 - Enzyme
 - React-Testing-Library
